@@ -8,95 +8,155 @@
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Fuentes opcionales -->
+  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   />
 
   <!-- Tu archivo CSS personalizado -->
   <link rel="stylesheet" href="style.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+            secondary: '#1e40af',
+            dark: '#1e293b',
+            light: '#f8fafc'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
 </head>
-<body class="min-h-screen flex flex-col text-gray-50 body-font">
-
-  <!-- Header / Barra Superior -->
-  <header class="flex items-center justify-between px-6 py-4 shadow title-font header-bg">
-    <div class="flex items-center space-x-3">
-      <div class="rounded-full w-12 h-12 flex items-center justify-center shadow-md header-logo">
-        <span class="text-2xl font-bold">🤖</span>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans">
+  <!-- Main Content -->
+  <div class="lg:ml-64 flex-1 transition-all duration-300">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-slate-200">
+      <!-- Mobile Menu Bar -->
+      <div class="h-14 lg:hidden flex items-center px-4 border-b border-slate-100">
+        <button 
+          id="mobileMenuBtn" 
+          class="p-2 rounded-lg hover:bg-slate-50"
+          aria-label="Abrir menú de navegación"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div class="ml-3">
+          <h1 class="text-lg font-semibold text-gray-900">Portal B2B</h1>
+        </div>
       </div>
-      <h1 class="text-2xl font-bold">Portal B2B</h1>
-    </div>
 
-    <button
-      class="hidden sm:inline-block px-4 py-2 rounded-md hover:opacity-90 transition text-sm font-semibold text-gray-100"
-      style="background-color: #0367A6;"
-    >
-      Iniciar Sesión
-    </button>
-  </header>
+      <!-- Search Bar -->
+      <div class="px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+          <div class="relative w-full sm:w-96">
+            <input
+              id="locationInput"
+              type="text"
+              placeholder="Buscar ubicación..."
+              class="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400 absolute left-3 top-2.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          
+          <button
+            id="searchButton"
+            class="w-full sm:w-auto bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M9 9a2 2 0 114 0 2 2 0 01-4 0z" />
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a4 4 0 00-3.446 6.032l-2.261 2.26a1 1 0 101.414 1.415l2.261-2.261A4 4 0 1011 5z" clip-rule="evenodd" />
+            </svg>
+            <span>Analizar</span>
+          </button>
+        </div>
+      </div>
+    </header>
 
-  <!-- Contenedor principal -->
-  <main class="flex-grow container mx-auto py-6 px-4 relative">
-    <!-- Sección: Búsqueda de ubicación -->
-    <div
-      class="mb-6 flex flex-col sm:flex-row items-center glass-card p-4"
-    >
-      <label class="text-lg font-semibold mb-2 sm:mb-0 sm:mr-4" for="locationInput">
-        Ubicación:
-      </label>
-      <input
-        id="locationInput"
-        type="text"
-        placeholder="Ej: PH Rio Mar, Panamá"
-        class="flex-grow border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-[#3F9BBF] text-gray-800 mb-3 sm:mb-0 sm:mr-2"
-      />
-      <button
-        id="searchButton"
-        class="bg-[#0367A6] text-white font-semibold px-6 py-2 rounded-md hover:bg-[#3F9BBF] transition w-full sm:w-auto"
+    <!-- Main Content Area -->
+    <main class="p-4 sm:p-6 lg:p-8">
+      <!-- Loading Overlay -->
+      <div
+        id="loadingOverlay"
+        class="hidden fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50"
       >
-        Buscar
-      </button>
-    </div>
-
-    <!-- Nuevo Overlay con Partículas -->
-    <div
-      id="loadingOverlay"
-      class="hidden absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 bg-opacity-70 z-50"
-    >
-      <div class="loader-container">
-        <!-- Partículas (se definen 13 divs con .particle) -->
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+        <div class="loader-container">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
       </div>
+
+      <!-- Error Container -->
+      <div id="errorContainer" class="mb-6"></div>
+
+      <!-- Dashboard Container -->
+      <div id="dashboardContainer" class="hidden space-y-6">
+        <!-- Content will be dynamically injected here -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-slate-200 z-50 transition-transform duration-300 ease-in-out transform -translate-x-full lg:translate-x-0">
+    <div class="p-6">
+      <div class="flex items-center space-x-3 mb-8">
+        <div class="rounded-lg w-10 h-10 flex items-center justify-center bg-primary text-white">
+          <span class="text-xl font-bold">🏢</span>
+        </div>
+        <h1 class="text-xl font-bold text-dark">Portal B2B</h1>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg bg-blue-50 text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+          </svg>
+          <span>Pólizas</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+          </svg>
+          <span>Ayuda</span>
+        </a>
+      </nav>
     </div>
+  </div>
 
-    <!-- Contenedor de error / mensajes -->
-    <div id="errorContainer" class="mt-4"></div>
-
-    <!-- Dashboard Container (contenido dinámico) -->
-    <div id="dashboardContainer" class="hidden flex flex-col space-y-6 mt-6">
-      <!-- Se inyectará contenido en orden: Riesgo → Clima → Detalles -->
-    </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="text-center py-4 text-sm text-gray-100">
-    &copy; 2025 - Proyecto B2B Pólizas de Incendio
-  </footer>
+  <!-- Overlay for mobile menu -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
 
   <!-- Script con la lógica JS -->
   <script src="main.js"></script>
