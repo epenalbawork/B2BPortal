@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal B2B</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fuentes opcionales -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tu archivo CSS personalizado -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen flex flex-col text-gray-50 body-font">
+
+  <!-- Header / Barra Superior -->
+  <header class="flex items-center justify-between px-6 py-4 shadow title-font header-bg">
+    <div class="flex items-center space-x-3">
+      <div class="rounded-full w-12 h-12 flex items-center justify-center shadow-md header-logo">
+        <span class="text-2xl font-bold">🤖</span>
+      </div>
+      <h1 class="text-2xl font-bold">Portal B2B</h1>
+    </div>
+
+    <button
+      class="hidden sm:inline-block px-4 py-2 rounded-md hover:opacity-90 transition text-sm font-semibold text-gray-100"
+      style="background-color: #0367A6;"
+    >
+      Iniciar Sesión
+    </button>
+  </header>
+
+  <!-- Contenedor principal -->
+  <main class="flex-grow container mx-auto py-6 px-4 relative">
+    <!-- Sección: Búsqueda de ubicación -->
+    <div
+      class="mb-6 flex flex-col sm:flex-row items-center glass-card p-4"
+    >
+      <label class="text-lg font-semibold mb-2 sm:mb-0 sm:mr-4" for="locationInput">
+        Ubicación:
+      </label>
+      <input
+        id="locationInput"
+        type="text"
+        placeholder="Ej: PH Rio Mar, Panamá"
+        class="flex-grow border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-[#3F9BBF] text-gray-800 mb-3 sm:mb-0 sm:mr-2"
+      />
+      <button
+        id="searchButton"
+        class="bg-[#0367A6] text-white font-semibold px-6 py-2 rounded-md hover:bg-[#3F9BBF] transition w-full sm:w-auto"
+      >
+        Buscar
+      </button>
+    </div>
+
+    <!-- Nuevo Overlay con Partículas -->
+    <div
+      id="loadingOverlay"
+      class="hidden absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 bg-opacity-70 z-50"
+    >
+      <div class="loader-container">
+        <!-- Partículas (se definen 13 divs con .particle) -->
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+    </div>
+
+    <!-- Contenedor de error / mensajes -->
+    <div id="errorContainer" class="mt-4"></div>
+
+    <!-- Dashboard Container (contenido dinámico) -->
+    <div id="dashboardContainer" class="hidden flex flex-col space-y-6 mt-6">
+      <!-- Se inyectará contenido en orden: Riesgo → Clima → Detalles -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-4 text-sm text-gray-100">
+    &copy; 2025 - Proyecto B2B Pólizas de Incendio
+  </footer>
+
+  <!-- Script con la lógica JS -->
+  <script src="main.js"></script>
+</body>
+</html>
