@@ -12,36 +12,74 @@ const dashboardContainer = document.getElementById('dashboardContainer');
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const sidebar = document.getElementById('sidebar');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
+const desktopSidebarToggle = document.getElementById('desktopSidebarToggle');
+const themeToggle = document.getElementById('themeToggle');
+const mainContent = document.getElementById('mainContent');
+const html = document.documentElement;
 
-// Mobile menu functionality
-function toggleSidebar() {
-  const isOpen = !sidebar.classList.contains('-translate-x-full');
+// Theme Management
+const userTheme = localStorage.getItem('theme');
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+// Initial theme setup
+const initTheme = () => {
+  if (userTheme === 'dark' || (!userTheme && systemTheme)) {
+    html.classList.add('dark');
+  }
+};
+
+// Toggle theme
+const toggleTheme = () => {
+  if (html.classList.contains('dark')) {
+    html.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  }
+};
+
+// Sidebar state management
+const isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+const initSidebar = () => {
+  if (isSidebarCollapsed) {
+    mainContent.classList.remove('lg:ml-64');
+    sidebar.classList.add('lg:-translate-x-full');
+  }
+};
+
+const toggleSidebar = () => {
+  const isCollapsed = sidebar.classList.contains('lg:-translate-x-full');
+  
+  if (isCollapsed) {
+    sidebar.classList.remove('lg:-translate-x-full');
+    mainContent.classList.add('lg:ml-64');
+    localStorage.setItem('sidebarCollapsed', 'false');
+  } else {
+    sidebar.classList.add('lg:-translate-x-full');
+    mainContent.classList.remove('lg:ml-64');
+    localStorage.setItem('sidebarCollapsed', 'true');
+  }
+};
+
+// Mobile menu toggle
+const toggleMobileMenu = () => {
   sidebar.classList.toggle('-translate-x-full');
   sidebarOverlay.classList.toggle('hidden');
-  
-  // Update aria-expanded state
-  mobileMenuBtn.setAttribute('aria-expanded', !isOpen);
-}
+  document.body.classList.toggle('overflow-hidden');
+};
 
-mobileMenuBtn.addEventListener('click', toggleSidebar);
-
-// Close sidebar when clicking outside on mobile
-document.addEventListener('click', (e) => {
-  const isClickInside = sidebar.contains(e.target) || mobileMenuBtn.contains(e.target);
-  if (!isClickInside && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
-    toggleSidebar();
-  }
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initSidebar();
 });
 
-// Handle window resize
-window.addEventListener('resize', () => {
-  if (window.innerWidth >= 1024) {
-    sidebar.classList.remove('-translate-x-full');
-    sidebarOverlay.classList.add('hidden');
-  } else if (!sidebar.classList.contains('-translate-x-full')) {
-    toggleSidebar();
-  }
-});
+themeToggle.addEventListener('click', toggleTheme);
+desktopSidebarToggle.addEventListener('click', toggleSidebar);
+mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+sidebarOverlay.addEventListener('click', toggleMobileMenu);
 
 // Evento click => Buscar
 searchButton.addEventListener('click', handleSearch);
